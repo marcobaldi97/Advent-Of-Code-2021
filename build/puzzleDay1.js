@@ -1,3 +1,4 @@
+"use strict";
 var fs = require('fs');
 function partOne() {
     var previousLine = 0;
