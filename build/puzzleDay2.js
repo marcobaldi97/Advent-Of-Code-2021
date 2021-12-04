@@ -34,7 +34,6 @@ var Puzzle2 = /** @class */ (function () {
         var aim = 0;
         var intructions = imports_1.fs.readFileSync('./input/day2.txt', 'utf8').split("\n");
         intructions.forEach(function (instruction) {
-            var instructionCopy = new String(instruction);
             var instructionSplit = instruction.split(" ");
             var direction = instructionSplit[0];
             var amount = Number(instructionSplit[1]);
