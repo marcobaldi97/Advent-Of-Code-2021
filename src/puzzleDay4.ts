@@ -30,7 +30,10 @@ class Puzzle4 {
 
     //given a table and numbers, check wheter the numbers complete a row or a column and return all the numbers that are not in said row or column
     static checkRowOrColumn(table: any, numbers: string[]): string[] {
+        const { getValues, transpose } = Puzzle4;
+
         if (numbers < table[0]) return [];
+
         let winnerValues: string[] = [];
 
         function verifyRows(table: string[][], numbers: string[]): string[] {
@@ -50,12 +53,10 @@ class Puzzle4 {
             } else return [];
         }
 
-        winnerValues.push(...verifyRows(table, numbers));
+        if (verifyRows(table, numbers).length > 0 || verifyRows(transpose(table), numbers).length > 0) {//bingo!
+            const values = getValues(table);
 
-        if (winnerValues.length === 0) {
-            const transposedTable = Puzzle4.transpose(table);
-
-            winnerValues.push(...verifyRows(transposedTable, numbers));
+            winnerValues = _.uniq(_.difference(values, numbers));
         }
 
         return winnerValues;

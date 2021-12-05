@@ -27,6 +27,7 @@ var Puzzle4 = /** @class */ (function () {
     };
     //given a table and numbers, check wheter the numbers complete a row or a column and return all the numbers that are not in said row or column
     Puzzle4.checkRowOrColumn = function (table, numbers) {
+        var getValues = Puzzle4.getValues, transpose = Puzzle4.transpose;
         if (numbers < table[0])
             return [];
         var winnerValues = [];
@@ -45,10 +46,9 @@ var Puzzle4 = /** @class */ (function () {
             else
                 return [];
         }
-        winnerValues.push.apply(winnerValues, verifyRows(table, numbers));
-        if (winnerValues.length === 0) {
-            var transposedTable = Puzzle4.transpose(table);
-            winnerValues.push.apply(winnerValues, verifyRows(transposedTable, numbers));
+        if (verifyRows(table, numbers).length > 0 || verifyRows(transpose(table), numbers).length > 0) { //bingo!
+            var values = getValues(table);
+            winnerValues = imports_1._.uniq(imports_1._.difference(values, numbers));
         }
         return winnerValues;
     };
@@ -72,7 +72,6 @@ var Puzzle4 = /** @class */ (function () {
         tablesPreRefined.forEach(function (table) {
             tables.push(Puzzle4.processTable(table));
         });
-        var lineLength = tables[0][0].length;
         var winningTables = [];
         for (var tableNumber = 0; tableNumber < tables.length; tableNumber++) {
             var aux = imports_1._.clone(bingoNumbers);
@@ -84,7 +83,7 @@ var Puzzle4 = /** @class */ (function () {
                 var winnerValues = Puzzle4.checkRowOrColumn(table, toProcessNumbers);
                 if (winnerValues.length > 0) {
                     var value = imports_1._.sum(winnerValues.map(function (val) { return parseInt(val); })) * parseInt(currentNumber !== null && currentNumber !== void 0 ? currentNumber : "0");
-                    winningTables.push({ difference: imports_1._.difference(table, toProcessNumbers), winningNumbers: toProcessNumbers, table: table, value: value, iteration: iterations });
+                    winningTables.push({ winningNumbers: toProcessNumbers, table: table, value: value, iteration: iterations });
                     break;
                 }
                 else {
